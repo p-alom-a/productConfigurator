@@ -5,7 +5,6 @@ import PersonnalisationPage from './PersonnalisationPage.jsx';
 
 export default function App() {
   return (
-
     <Router basename="/productConfigurator">
       <Routes>
         <Route path="/" element={<IkeaProductPage />} />

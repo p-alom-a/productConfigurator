@@ -1,9 +1,7 @@
-import './index.css';
-import { createRoot } from 'react-dom/client';
 import React from 'react';
-import App from './App'; // Assuming App is your main component
+import { createRoot } from 'react-dom/client';
+import App from './App';
 
-// Create the root once and reuse it
 const rootElement = document.querySelector('#root');
 const root = createRoot(rootElement);
 
