@@ -16,7 +16,7 @@ const colorMappings = {
 
 export default function ChairModel({ activeTexture, activeColor }) {
   const { nodes, materials } = useGLTF('./model/assets/chair2.glb');
-  
+
   // Charger les textures de coton
   const cottonTextures = useTexture({
     normalMap: './model/assets/Fabric061_1K-PNG/Fabric061_1K-PNG_NormalDX.png',

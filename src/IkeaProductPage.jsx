@@ -10,7 +10,7 @@ const IkeaProductPage = () => {
         const checkMobile = () => {
             setIsMobile(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent));
         };
-        
+
         checkMobile();
         window.addEventListener('resize', checkMobile);
         return () => window.removeEventListener('resize', checkMobile);
@@ -75,7 +75,7 @@ const IkeaProductPage = () => {
                                 Ajouter au panier
                             </button>
 
-                            <button 
+                            <button
                                 onClick={() => navigate('/personnalisation')}
                                 className="w-full bg-white border-2 border-blue-600 text-blue-600 py-4 rounded-full font-semibold hover:bg-blue-50 transition flex items-center justify-center gap-2"
                             >

@@ -1,9 +1,8 @@
-import './style.css';
 import React, { useState, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Canvas } from '@react-three/fiber';
 import ChairModel from './ChairModel.jsx';
-import { Stage, OrbitControls, Loader } from '@react-three/drei';
+import { Stage, OrbitControls } from '@react-three/drei';
 import { ArrowLeft } from 'lucide-react';
 
 const colorOptions = {
