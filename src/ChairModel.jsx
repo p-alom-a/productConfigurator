@@ -23,7 +23,7 @@ export default function ChairModel({ activeTexture, activeColor }) {
     baseColorMap: './model/assets/Fabric061_1K-PNG/Fabric061_1K-PNG_Color.png',
     displacementMap: './model/assets/Fabric061_1K-PNG/Fabric061_1K-PNG_Displacement.png',
     roughnessMap: './model/assets/Fabric061_1K-PNG/Fabric061_1K-PNG_Roughness.png',
-    aoMap: '/model/assets/Fabric061_1K-PNG/Fabric061_1K-PNG_AmbientOcclusion.png',
+    // aoMap: '/model/assets/Fabric061_1K-PNG/Fabric061_1K-PNG_AmbientOcclusion.png',
   });
 
   // Créer un matériau centralisé pour les meshes
