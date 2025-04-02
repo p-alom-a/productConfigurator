@@ -31,7 +31,7 @@ export default function ChairModel({ activeTexture, activeColor }) {
     map: activeTexture === 'leather' ? materials.leather.map : cottonTextures.baseColorMap,
     normalMap: activeTexture === 'leather' ? materials.leather.normalMap : cottonTextures.normalMap,
     displacementMap: activeTexture === 'leather' ? materials.leather.displacementMap : cottonTextures.displacementMap,
-    aoMap: activeTexture === 'leather' ? materials.leather.aoMap : cottonTextures.aoMap,
+    // aoMap: activeTexture === 'leather' ? materials.leather.aoMap : cottonTextures.aoMap,
     roughnessMap: activeTexture === 'leather' ? materials.leather.roughnessMap : cottonTextures.roughnessMap,
     color: new THREE.Color(colorMappings[activeTexture][activeColor]),
     roughness: 1,

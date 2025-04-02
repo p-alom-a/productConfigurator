@@ -1,9 +1,9 @@
 import React, { useState, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Canvas } from '@react-three/fiber';
-import ChairModel from './ChairModel.jsx';
 import { Stage, OrbitControls } from '@react-three/drei';
 import { ArrowLeft } from 'lucide-react';
+import ChairModel from './ChairModel.jsx';
 
 const colorOptions = {
   leather: [
@@ -17,15 +17,58 @@ const colorOptions = {
   ]
 };
 
+// Simplified 3D Scene Component to improve performance
+const ChairScene = ({ activeTexture, activeColor }) => {
+  return (
+    <Canvas
+    shadows
+    gl={{ 
+      powerPreference: "high-performance",
+      antialias: true, 
+      alpha: false
+    }}
+    camera={{ position: [1.3, 0.3, -0.6], fov: 45 }}
+    className="w-full h-[600px] bg-white rounded-lg shadow-lg"
+  >
+      <color attach="background" args={["#f5f5f5"]} />
+      <ambientLight intensity={1} />
+      <pointLight position={[10, 10, 10]} intensity={0.5} />
+      
+      <Suspense fallback={null}>
+      <Stage
+                environment="apartment"
+                intensity={0.5}
+                preset="rembrandt"
+                adjustCamera={0}
+                opacity={0.5}
+                shadows={false}
+              >
+          <ChairModel
+            activeTexture={activeTexture}
+            activeColor={activeColor}
+          />
+        </Stage>
+      </Suspense>
+      
+      <OrbitControls 
+        makeDefault 
+        minPolarAngle={0} 
+        maxPolarAngle={Math.PI / 2}
+        enableZoom={true}
+        enablePan={false}
+        zoomSpeed={0.5}
+      />
+    </Canvas>
+  );
+};
+
 const PersonnalisationPage = () => {
-  const [activeTexture, setActiveTexture] = useState('leather');
-  const [activeColor, setActiveColor] = useState('chestnut');
   const [textureType, setTextureType] = useState('leather');
+  const [activeColor, setActiveColor] = useState('chestnut');
   const navigate = useNavigate();
 
   const handleTextureChange = (type) => {
     setTextureType(type);
-    setActiveTexture(type);
     setActiveColor(type === 'leather' ? 'chestnut' : 'blue');
   };
 
@@ -45,8 +88,8 @@ const PersonnalisationPage = () => {
         <h1 className="text-2xl font-bold">ASTER - Configurateur de Fauteuil</h1>
       </header>
 
-      <div className="flex flex-1">
-        <div className="w-1/3 bg-white p-6 shadow-md">
+      <div className="flex flex-col md:flex-row flex-1">
+        <div className="w-full md:w-1/3 bg-white p-6 shadow-md">
           <h2 className="text-xl font-semibold mb-4">Personnalisation</h2>
 
           <div className="mb-6">
@@ -113,36 +156,20 @@ const PersonnalisationPage = () => {
           </div>
         </div>
 
-        <div className="w-2/3 bg-gray-100 flex items-center justify-center p-8 relative">
-          <Suspense fallback={
-            <div className="absolute inset-0 flex items-center justify-center bg-white/50">
-              <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
-            </div>
-          }>
-            <Canvas
-              shadows
-              gl={{ antialias: false }}
-              camera={{ position: [1.3, 0.3, -0.6], fov: 45 }}
-              className="w-full h-[600px] bg-white rounded-lg shadow-lg"
-            >
-              <pointLight position={[10, 10, 10]} intensity={1} />
-              <ambientLight intensity={5} />
-              <Stage
-                environment="apartment"
-                intensity={0.5}
-                preset="rembrandt"
-                adjustCamera={0}
-                opacity={0.5}
-                shadows={false}
-              >
-                <ChairModel
-                  activeTexture={textureType}
-                  activeColor={activeColor}
-                />
-              </Stage>
-              <OrbitControls makeDefault minPolarAngle={0} maxPolarAngle={Math.PI / 2} />
-            </Canvas>
-          </Suspense>
+        <div className="w-full md:w-2/3 bg-gray-100 flex items-center justify-center p-4 md:p-8 relative min-h-96">
+          <div className="w-full h-96 md:h-full relative rounded-lg overflow-hidden shadow-lg">
+            <Suspense fallback={
+              <div className="absolute inset-0 flex items-center justify-center bg-white">
+                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+                <p className="ml-4 text-blue-500 font-medium">Chargement du modèle 3D...</p>
+              </div>
+            }>
+              <ChairScene
+                activeTexture={textureType}
+                activeColor={activeColor}
+              />
+            </Suspense>
+          </div>
         </div>
       </div>
 
