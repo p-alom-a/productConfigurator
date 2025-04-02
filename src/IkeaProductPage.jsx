@@ -24,8 +24,8 @@ const IkeaProductPage = () => {
 
     const openARView = () => {
         // URLs des modèles 3D
-        const usdzModelUrl = '/models/soderhamn.usdz';
-        const gltfModelUrl = '/models/soderhamn.gltf';
+        const usdzModelUrl = 'public/model/assets/chair2.usdz';
+        const gltfModelUrl = 'public/model/assets/chair2.glb';
         
         if (isIOS) {
             // Pour iOS, utiliser AR Quick Look
