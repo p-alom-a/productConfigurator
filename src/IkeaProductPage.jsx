@@ -28,8 +28,8 @@ const IkeaProductPage = () => {
         const gltfModelUrl = './model/assets/chair2.glb';
         
         if (isIOS) {
-            // Pour iOS, utiliser AR Quick Look
-            window.location.href = usdzModelUrl;
+            // Pour iOS, utiliser AR Quick Look avec le paramètre pour lancer directement en AR
+            window.location.href = `${usdzModelUrl}#allowsContentScaling=0&autoplay=1&shouldOpenInAR=1`;
         } else {
             // Pour Android, utiliser Scene Viewer
             window.location.href = `intent://arvr.google.com/scene-viewer/1.0?file=${window.location.origin}${gltfModelUrl}&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=${window.location.origin};end;`;
