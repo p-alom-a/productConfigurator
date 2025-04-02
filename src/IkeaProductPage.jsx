@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronRight, Cuboid as Cube, View, ShoppingCart, Heart, Share2 } from 'lucide-react';
+import { ChevronRight, Cuboid as Cube, View, ShoppingCart, Heart, Share2, Loader } from 'lucide-react';
 
 const IkeaProductPage = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
+  const [isLoadingAR, setIsLoadingAR] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,24 +23,40 @@ const IkeaProductPage = () => {
   }, []);
 
   const openARView = () => {
+    // Activé l'indicateur de chargement
+    setIsLoadingAR(true);
+    
     // URLs des modèles 3D
     const usdzModelUrl = './model/assets/chair2.usdz';
     const gltfModelUrl = './model/assets/chair2.glb';
     
-    if (isIOS) {
-      // Using the rel="ar" attribute approach for direct AR launch on iOS
-      const arLink = document.createElement('a');
-      arLink.setAttribute('rel', 'ar');
-      arLink.setAttribute('href', usdzModelUrl);
-      // Adding the AR quick look parameters to force immediate AR mode
-      arLink.href = `${usdzModelUrl}#allowsContentScaling=0&autoplay=1&shouldOpenInAR=1`;
-      document.body.appendChild(arLink);
-      arLink.click();
-      document.body.removeChild(arLink);
-    } else {
-      // Pour Android, utiliser Scene Viewer
-      window.location.href = `intent://arvr.google.com/scene-viewer/1.0?file=${window.location.origin}${gltfModelUrl}&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=${window.location.origin};end;`;
-    }
+    // Ajouter un léger délai pour permettre à l'UI de se mettre à jour
+    setTimeout(() => {
+      if (isIOS) {
+        // Using the rel="ar" attribute approach for direct AR launch on iOS
+        const arLink = document.createElement('a');
+        arLink.setAttribute('rel', 'ar');
+        arLink.setAttribute('href', usdzModelUrl);
+        // Adding the AR quick look parameters to force immediate AR mode
+        arLink.href = `${usdzModelUrl}#allowsContentScaling=0&autoplay=1&shouldOpenInAR=1`;
+        document.body.appendChild(arLink);
+        arLink.click();
+        document.body.removeChild(arLink);
+        
+        // Réinitialiser l'état de chargement après un délai
+        setTimeout(() => {
+          setIsLoadingAR(false);
+        }, 5000); // 5 secondes, pour laisser le temps à l'app AR de démarrer
+      } else {
+        // Pour Android, utiliser Scene Viewer
+        window.location.href = `intent://arvr.google.com/scene-viewer/1.0?file=${window.location.origin}${gltfModelUrl}&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=${window.location.origin};end;`;
+        
+        // Réinitialiser l'état de chargement pour Android après un délai
+        setTimeout(() => {
+          setIsLoadingAR(false);
+        }, 5000);
+      }
+    }, 300);
   };
 
   return (
@@ -54,6 +71,28 @@ const IkeaProductPage = () => {
           </div>
         </div>
       </nav>
+
+      {/* Modal de chargement AR */}
+      {isLoadingAR && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 flex flex-col items-center max-w-sm mx-4">
+            <Loader className="w-12 h-12 text-blue-600 animate-spin mb-4" />
+            <h3 className="text-xl font-semibold mb-2">Chargement de l'AR</h3>
+            <p className="text-gray-600 text-center mb-2">
+              Veuillez patienter pendant que nous préparons votre expérience de réalité augmentée...
+            </p>
+            <p className="text-gray-500 text-sm text-center">
+              L'application AR devrait s'ouvrir automatiquement. Si rien ne se passe après quelques secondes, vérifiez que votre appareil est compatible.
+            </p>
+            <button 
+              onClick={() => setIsLoadingAR(false)}
+              className="mt-4 px-4 py-2 bg-gray-200 rounded-full hover:bg-gray-300 transition"
+            >
+              Annuler
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Product Section */}
       <div className="max-w-7xl mx-auto px-4 py-8">
