@@ -4,17 +4,37 @@ import { ChevronRight, Cuboid as Cube, View, ShoppingCart, Heart, Share2 } from 
 
 const IkeaProductPage = () => {
     const [isMobile, setIsMobile] = useState(false);
+    const [isIOS, setIsIOS] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
-        const checkMobile = () => {
-            setIsMobile(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent));
+        const checkDevice = () => {
+            const userAgent = navigator.userAgent;
+            const mobileCheck = /iPhone|iPad|iPod|Android/i.test(userAgent);
+            const iosCheck = /iPhone|iPad|iPod/i.test(userAgent);
+            
+            setIsMobile(mobileCheck);
+            setIsIOS(iosCheck);
         };
 
-        checkMobile();
-        window.addEventListener('resize', checkMobile);
-        return () => window.removeEventListener('resize', checkMobile);
+        checkDevice();
+        window.addEventListener('resize', checkDevice);
+        return () => window.removeEventListener('resize', checkDevice);
     }, []);
+
+    const openARView = () => {
+        // URLs des modèles 3D
+        const usdzModelUrl = '/models/soderhamn.usdz';
+        const gltfModelUrl = '/models/soderhamn.gltf';
+        
+        if (isIOS) {
+            // Pour iOS, utiliser AR Quick Look
+            window.location.href = usdzModelUrl;
+        } else {
+            // Pour Android, utiliser Scene Viewer
+            window.location.href = `intent://arvr.google.com/scene-viewer/1.0?file=${window.location.origin}${gltfModelUrl}&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=${window.location.origin};end;`;
+        }
+    };
 
     return (
         <div className="min-h-screen bg-white">
@@ -85,9 +105,12 @@ const IkeaProductPage = () => {
                             </button>
 
                             {isMobile && (
-                                <button className="w-full bg-white border-2 border-blue-600 text-blue-600 py-4 rounded-full font-semibold hover:bg-blue-50 transition flex items-center justify-center gap-2">
+                                <button 
+                                    onClick={openARView}
+                                    className="w-full bg-white border-2 border-blue-600 text-blue-600 py-4 rounded-full font-semibold hover:bg-blue-50 transition flex items-center justify-center gap-2"
+                                >
                                     <View className="w-5 h-5" />
-                                    Voir en AR
+                                    Voir en réalité augmentée
                                     <ChevronRight className="w-5 h-5" />
                                 </button>
                             )}
