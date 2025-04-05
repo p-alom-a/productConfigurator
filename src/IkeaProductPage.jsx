@@ -1,14 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronRight, Cuboid as Cube, View, ShoppingCart, Heart, Share2, Loader, Star, Clock } from 'lucide-react';
-import mainImage from './assets/img/illus-salon.png';
-import thumbnailImage from './assets/img/illus-white.jpg';
+// Importer les images depuis le module dédié
+import { productImages } from './productImages';
+
+// Composant pour les miniatures
+const ImageThumbnail = ({ image, alt, onClick, isActive = false }) => {
+  return (
+    <img
+      src={image}
+      alt={alt}
+      onClick={onClick}
+      className={`w-full h-24 object-cover rounded-md cursor-pointer transition 
+        ${isActive ? 'border-2 border-gray-800' : 'hover:opacity-75'}`}
+    />
+  );
+};
 
 const IkeaProductPage = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
   const [isLoadingAR, setIsLoadingAR] = useState(false);
   const [selectedMaterial, setSelectedMaterial] = useState('cuir');
+  const [currentImage, setCurrentImage] = useState(productImages.main);
+  const [activeThumbId, setActiveThumbId] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,6 +39,12 @@ const IkeaProductPage = () => {
     window.addEventListener('resize', checkDevice);
     return () => window.removeEventListener('resize', checkDevice);
   }, []);
+
+  // Fonction pour changer l'image principale
+  const changeMainImage = (image, thumbId) => {
+    setCurrentImage(image);
+    setActiveThumbId(thumbId);
+  };
 
   const openARView = () => {
     // Activé l'indicateur de chargement
@@ -153,17 +174,18 @@ const IkeaProductPage = () => {
           {/* Image Gallery */}
           <div className="space-y-4">
             <img
-              src={mainImage}
+              src={currentImage}
               alt="SÖDERHAMN Fauteuil en cuir"
               className="w-full h-[500px] object-cover rounded-lg"
             />
             <div className="grid grid-cols-4 gap-2">
-              {[...Array(4)].map((_, i) => (
-                <img
-                  key={i}
-                  src={thumbnailImage}
-                  alt={`Vue ${i + 1}`}
-                  className="w-full h-24 object-cover rounded-md cursor-pointer hover:opacity-75 transition"
+              {productImages.thumbnails.map((thumb) => (
+                <ImageThumbnail
+                  key={thumb.id}
+                  image={thumb.src}
+                  alt={thumb.alt}
+                  onClick={() => changeMainImage(thumb.src, thumb.id)}
+                  isActive={activeThumbId === thumb.id}
                 />
               ))}
             </div>
@@ -295,6 +317,6 @@ const IkeaProductPage = () => {
       </div>
     </div>
   );
-}
+};
 
 export default IkeaProductPage;
