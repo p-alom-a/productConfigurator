@@ -37,8 +37,8 @@ export default function ChairModel({ activeTexture, activeColor }) {
     color: new THREE.Color(colorMappings[activeTexture][activeColor]),
     roughness: 1,
     metalness: 0.5,
-    displacementScale: 0.001,
-    displacementBias: -0.00001,
+    displacementScale: 0.00001,
+    displacementBias: -0.000001,
   });
 
   return (
