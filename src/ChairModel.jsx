@@ -6,7 +6,7 @@ const colorMappings = {
   leather: {
     chestnut: '#7B503C',
     darkBrown: '#4A2C1D',
-    caramel: '#AF6E4D'
+    caramel: '#FFE8D9'
   },
   tissu: {
     blue: '#FDFBFC',
@@ -24,6 +24,7 @@ export default function ChairModel({ activeTexture, activeColor }) {
     displacementMap: './model/assets/Fabric061_1K-PNG/Fabric061_1K-PNG_Displacement.png',
     roughnessMap: './model/assets/Fabric061_1K-PNG/Fabric061_1K-PNG_Roughness.png',
     // aoMap: '/model/assets/Fabric061_1K-PNG/Fabric061_1K-PNG_AmbientOcclusion.png',
+    
   });
 
   // Créer un matériau centralisé pour les meshes
@@ -36,7 +37,7 @@ export default function ChairModel({ activeTexture, activeColor }) {
     color: new THREE.Color(colorMappings[activeTexture][activeColor]),
     roughness: 1,
     metalness: 0.5,
-    displacementScale: 0.0001,
+    displacementScale: 0.001,
     displacementBias: -0.00001,
   });
 
