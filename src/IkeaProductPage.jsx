@@ -82,7 +82,6 @@ const IkeaProductPage = () => {
       }
     }, 300);
   };
-  
 
   // Avis clients fictifs
   const reviews = [
