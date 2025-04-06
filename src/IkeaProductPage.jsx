@@ -47,26 +47,26 @@ const IkeaProductPage = () => {
   };
 
   const openARView = () => {
-    // Activé l'indicateur de chargement
+    // Activer l'indicateur de chargement
     setIsLoadingAR(true);
-    
+  
     // URLs des modèles 3D
     const usdzModelUrl = './model/assets/chair2.usdz';
     const gltfModelUrl = './model/assets/chair2.glb';
-    
+  
     // Ajouter un léger délai pour permettre à l'UI de se mettre à jour
     setTimeout(() => {
       if (isIOS) {
-        // Using the rel="ar" attribute approach for direct AR launch on iOS
+        // Utiliser l'approche avec l'attribut rel="ar" pour un lancement direct de l'AR sur iOS
         const arLink = document.createElement('a');
         arLink.setAttribute('rel', 'ar');
         arLink.setAttribute('href', usdzModelUrl);
-        // Adding the AR quick look parameters to force immediate AR mode
+        // Ajouter les paramètres AR Quick Look pour forcer le mode AR immédiat
         arLink.href = `${usdzModelUrl}#allowsContentScaling=0&autoplay=1&shouldOpenInAR=1`;
         document.body.appendChild(arLink);
         arLink.click();
         document.body.removeChild(arLink);
-        
+  
         // Réinitialiser l'état de chargement après un délai
         setTimeout(() => {
           setIsLoadingAR(false);
@@ -74,7 +74,7 @@ const IkeaProductPage = () => {
       } else {
         // Pour Android, utiliser Scene Viewer
         window.location.href = `intent://arvr.google.com/scene-viewer/1.0?file=${window.location.origin}${gltfModelUrl}&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=${window.location.origin};end;`;
-        
+  
         // Réinitialiser l'état de chargement pour Android après un délai
         setTimeout(() => {
           setIsLoadingAR(false);
@@ -82,6 +82,7 @@ const IkeaProductPage = () => {
       }
     }, 300);
   };
+  
   
 
   // Avis clients fictifs
