@@ -102,13 +102,13 @@ const PersonnalisationPage = () => {
         </div>
       </nav>
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <h1 className="text-2xl font-semibold mb-6">Personnalisation - SÖDERHAMN</h1>
+      <div className="max-w-7xl mx-auto px-4 py-6">
+        <h1 className="text-2xl font-semibold mb-4">Personnalisation - SÖDERHAMN</h1>
         
-        {/* Modifié: ordre inversé en mobile */}
-        <div className="flex flex-col md:flex-row flex-1 gap-8">
+        {/* Modifié: ordre inversé en mobile et espace réduit */}
+        <div className="flex flex-col md:flex-row flex-1 gap-4 md:gap-8">
           {/* Visualisation du produit - maintenant en premier pour mobile */}
-          <div className="w-full md:w-2/3 order-1 md:order-2 bg-gray-50 flex items-center justify-center p-4 md:p-8 relative min-h-72 md:min-h-96 border border-gray-200 rounded-lg mb-8 md:mb-0">
+          <div className="w-full md:w-2/3 order-1 md:order-2 bg-gray-50 flex items-center justify-center p-3 md:p-8 relative min-h-72 md:min-h-96 border border-gray-200 rounded-lg mb-4 md:mb-0">
             <div className="w-full h-72 md:h-full relative rounded-lg overflow-hidden">
               <Suspense fallback={
                 <div className="absolute inset-0 flex items-center justify-center bg-white">
@@ -125,16 +125,16 @@ const PersonnalisationPage = () => {
           </div>
 
           {/* Paramètres de personnalisation - maintenant en second pour mobile */}
-          <div className="w-full md:w-1/3 order-2 md:order-1 bg-white p-6 border border-gray-200 rounded-lg shadow-sm">
-            <h2 className="text-xl font-semibold mb-4">Personnalisation</h2>
+          <div className="w-full md:w-1/3 order-2 md:order-1 bg-white p-4 md:p-6 border border-gray-200 rounded-lg shadow-sm">
+            <h2 className="text-xl font-semibold mb-3">Personnalisation</h2>
 
-            <div className="mb-6">
+            <div className="mb-4 md:mb-6">
               <h3 className="font-medium mb-2">Type de Revêtement</h3>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-3">
                 <button
                   onClick={() => handleTextureChange('leather')}
                   className={`
-                    p-4 border-2 rounded-lg transition-all duration-300
+                    p-3 md:p-4 border-2 rounded-lg transition-all duration-300
                     ${textureType === 'leather'
                       ? 'border-gray-800 bg-gray-100'
                       : 'border-gray-200 hover:border-gray-400'}
@@ -146,7 +146,7 @@ const PersonnalisationPage = () => {
                 <button
                   onClick={() => handleTextureChange('tissu')}
                   className={`
-                    p-4 border-2 rounded-lg transition-all duration-300
+                    p-3 md:p-4 border-2 rounded-lg transition-all duration-300
                     ${textureType === 'tissu'
                       ? 'border-gray-800 bg-gray-100'
                       : 'border-gray-200 hover:border-gray-400'}
@@ -158,33 +158,33 @@ const PersonnalisationPage = () => {
               </div>
             </div>
 
-            <div className="mb-6">
+            <div className="mb-4 md:mb-6">
               <h3 className="font-medium mb-2">Choix de la Couleur</h3>
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-3 gap-3">
                 {(textureType === 'leather' ? colorOptions.leather : colorOptions.tissu).map((option) => (
                   <button
                     key={option.value}
                     onClick={() => handleColorChange(option.value)}
                     className={`
-                      p-4 border-2 rounded-lg transition-all duration-300 flex flex-col items-center
+                      p-3 md:p-4 border-2 rounded-lg transition-all duration-300 flex flex-col items-center
                       ${activeColor === option.value
                         ? 'border-gray-800 bg-gray-100'
                         : 'border-gray-200 hover:border-gray-400'}
                     `}
                   >
                     <div
-                      className="w-12 h-12 mb-2 rounded-full border border-gray-200"
+                      className="w-10 h-10 md:w-12 md:h-12 mb-1 md:mb-2 rounded-full border border-gray-200"
                       style={{ backgroundColor: option.color }}
                     />
-                    <p className="text-sm font-medium">{option.label}</p>
+                    <p className="text-xs md:text-sm font-medium">{option.label}</p>
                   </button>
                 ))}
               </div>
             </div>
 
-            <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-              <h3 className="font-semibold mb-2">💡 Conseil</h3>
-              <p className="text-sm text-gray-600">
+            <div className="bg-gray-50 p-3 md:p-4 rounded-lg border border-gray-200">
+              <h3 className="font-semibold mb-1 md:mb-2">💡 Conseil</h3>
+              <p className="text-xs md:text-sm text-gray-600">
                 {textureType === 'leather'
                   ? 'Choisissez une teinte de cuir qui complémente votre intérieur.'
                   : 'Le tissu offre un confort et une variété de couleurs.'}
@@ -193,9 +193,9 @@ const PersonnalisationPage = () => {
           </div>
         </div>
         
-        <div className="mt-8">
+        <div className="mt-6 md:mt-8">
           <button 
-            className="bg-white border-2 border-gray-600 text-gray-600 py-4 px-8 rounded-full font-semibold hover:bg-gray-50 transition"
+            className="bg-white border-2 border-gray-600 text-gray-600 py-3 md:py-4 px-6 md:px-8 rounded-full font-semibold hover:bg-gray-50 transition"
             onClick={() => navigate('/')}
           >
             Retour à la fiche produit
@@ -203,7 +203,7 @@ const PersonnalisationPage = () => {
         </div>
       </div>
 
-      <footer className="bg-gray-100 p-4 text-center text-sm mt-12 border-t border-gray-200">
+      <footer className="bg-gray-100 p-4 text-center text-sm mt-8 md:mt-12 border-t border-gray-200">
         © 2025 MÖBEL. Tous droits réservés.
       </footer>
     </div>
