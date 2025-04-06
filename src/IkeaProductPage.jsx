@@ -50,8 +50,8 @@ const IkeaProductPage = () => {
     // Activé l'indicateur de chargement
     setIsLoadingAR(true);
   
-    // URL du modèle USDZ
-    const usdzModelUrl = './model/assets/chair2.usdz';
+    // URL du modèle GLTF
+    const gltfModelUrl = './model/assets/chair2.glb';
   
     setTimeout(() => {
       if (isIOS) {
@@ -78,6 +78,7 @@ const IkeaProductPage = () => {
       }
     }, 300);
   };
+  
   
 
   // Avis clients fictifs
