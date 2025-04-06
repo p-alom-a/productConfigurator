@@ -57,12 +57,21 @@ const IkeaProductPage = () => {
     // Ajouter un léger délai pour permettre à l'UI de se mettre à jour
     setTimeout(() => {
       if (isIOS) {
-        // Using the rel="ar" attribute approach for direct AR launch on iOS
+        // Ajout des paramètres spécifiques à AR QuickLook pour forcer le mode AR immédiat
         const arLink = document.createElement('a');
         arLink.setAttribute('rel', 'ar');
-        arLink.setAttribute('href', usdzModelUrl);
-        // Adding the AR quick look parameters to force immediate AR mode
-        arLink.href = `${usdzModelUrl}#allowsContentScaling=0&autoplay=1&shouldOpenInAR=1`;
+        
+        // Ces paramètres sont essentiels pour lancer directement en mode AR sans interface intermédiaire
+        const enhancedURL = `${usdzModelUrl}#allowsContentScaling=0&autoplay=1&shouldOpenInAR=1&immersiveAR=1`;
+        arLink.setAttribute('href', enhancedURL);
+        
+        // Ajouter des attributs supplémentaires pour forcer l'expérience AR
+        if (arLink.relList && arLink.relList.supports && arLink.relList.supports('ar')) {
+          // Attributs Apple spécifiques
+          arLink.setAttribute('data-usdzaction', 'quicklook-and-ar');
+          arLink.setAttribute('data-ar-preferred', 'true');
+        }
+        
         document.body.appendChild(arLink);
         arLink.click();
         document.body.removeChild(arLink);
@@ -72,7 +81,7 @@ const IkeaProductPage = () => {
           setIsLoadingAR(false);
         }, 5000); // 5 secondes, pour laisser le temps à l'app AR de démarrer
       } else {
-        // Pour Android, utiliser Scene Viewer
+        // Pour Android, utiliser Scene Viewer (inchangé)
         window.location.href = `intent://arvr.google.com/scene-viewer/1.0?file=${window.location.origin}${gltfModelUrl}&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=${window.location.origin};end;`;
         
         // Réinitialiser l'état de chargement pour Android après un délai
