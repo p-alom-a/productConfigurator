@@ -54,73 +54,35 @@ const IkeaProductPage = () => {
     const usdzModelUrl = './model/assets/chair2.usdz';
     const gltfModelUrl = './model/assets/chair2.glb';
     
+    // Ajouter un léger délai pour permettre à l'UI de se mettre à jour
     setTimeout(() => {
       if (isIOS) {
-        // Créer un écran de transition qui se ferme automatiquement
-        const overlay = document.createElement('div');
-        overlay.style.cssText = `
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background-color: rgba(0,0,0,0.8);
-          z-index: 9999;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          color: white;
-        `;
+        // Using the rel="ar" attribute approach for direct AR launch on iOS
+        const arLink = document.createElement('a');
+        arLink.setAttribute('rel', 'ar');
+        arLink.setAttribute('href', usdzModelUrl);
+        // Adding the AR quick look parameters to force immediate AR mode
+        arLink.href = `${usdzModelUrl}#allowsContentScaling=0&autoplay=1&shouldOpenInAR=1`;
+        document.body.appendChild(arLink);
+        arLink.click();
+        document.body.removeChild(arLink);
         
-        // Message d'explication et animation
-        overlay.innerHTML = `
-          <div style="text-align: center; padding: 20px;">
-            <svg viewBox="0 0 100 100" width="80" height="80">
-              <path d="M50 15 L85 85 L15 85 Z" fill="none" stroke="white" stroke-width="3"></path>
-              <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="2s" repeatCount="indefinite"></animateTransform>
-            </svg>
-            <h2 style="margin-top: 20px;">Lancement AR en cours...</h2>
-            <p>Veuillez appuyer sur l'icône AR qui apparaîtra</p>
-            <p>L'application se lancera automatiquement dans <span id="countdown">3</span> secondes</p>
-          </div>
-        `;
-        
-        document.body.appendChild(overlay);
-        
-        // Compte à rebours
-        let count = 3;
-        const countdownInterval = setInterval(() => {
-          count--;
-          document.getElementById('countdown').textContent = count;
-          if (count <= 0) {
-            clearInterval(countdownInterval);
-            
-            // Créer et cliquer sur le lien AR après le compte à rebours
-            const arLink = document.createElement('a');
-            arLink.setAttribute('rel', 'ar');
-            arLink.setAttribute('href', usdzModelUrl);
-            document.body.appendChild(arLink);
-            arLink.click();
-            document.body.removeChild(arLink);
-            
-            // Retirer l'overlay après un délai
-            setTimeout(() => {
-              document.body.removeChild(overlay);
-              setIsLoadingAR(false);
-            }, 1000);
-          }
-        }, 1000);
+        // Réinitialiser l'état de chargement après un délai
+        setTimeout(() => {
+          setIsLoadingAR(false);
+        }, 5000); // 5 secondes, pour laisser le temps à l'app AR de démarrer
       } else {
-        // Code Android inchangé
+        // Pour Android, utiliser Scene Viewer
         window.location.href = `intent://arvr.google.com/scene-viewer/1.0?file=${window.location.origin}${gltfModelUrl}&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=${window.location.origin};end;`;
         
+        // Réinitialiser l'état de chargement pour Android après un délai
         setTimeout(() => {
           setIsLoadingAR(false);
         }, 5000);
       }
     }, 300);
   };
+  
 
   // Avis clients fictifs
   const reviews = [
