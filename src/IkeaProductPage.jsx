@@ -54,21 +54,25 @@ const IkeaProductPage = () => {
     const usdzModelUrl = './model/assets/chair2.usdz';
     const gltfModelUrl = './model/assets/chair2.glb';
     
-    // Ajouter un léger délai pour permettre à l'UI de se mettre à jour
     setTimeout(() => {
       if (isIOS) {
-        // Utilisation d'une redirection directe pour iOS Quick Look AR
-        window.location.href = `${usdzModelUrl}#allowsContentScaling=0&autoplay=1&shouldOpenInAR=1`;
+        // Création et déclenchement d'un lien AR QuickLook dans le DOM
+        const anchor = document.createElement('a');
+        // Important: le rel="ar" déclenche le mode AR sur iOS
+        anchor.setAttribute('rel', 'ar');
+        anchor.setAttribute('href', usdzModelUrl);
+        // Ajouter au DOM, déclencher, puis supprimer
+        document.body.appendChild(anchor);
+        anchor.click();
+        document.body.removeChild(anchor);
         
-        // Réinitialiser l'état de chargement après un délai
         setTimeout(() => {
           setIsLoadingAR(false);
-        }, 2000); // 2 secondes, réduit car le lancement direct est plus rapide
+        }, 2000);
       } else {
         // Pour Android, utiliser Scene Viewer
         window.location.href = `intent://arvr.google.com/scene-viewer/1.0?file=${window.location.origin}${gltfModelUrl}&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=${window.location.origin};end;`;
         
-        // Réinitialiser l'état de chargement pour Android après un délai
         setTimeout(() => {
           setIsLoadingAR(false);
         }, 2000);
