@@ -57,20 +57,13 @@ const IkeaProductPage = () => {
     // Ajouter un léger délai pour permettre à l'UI de se mettre à jour
     setTimeout(() => {
       if (isIOS) {
-        // Using the rel="ar" attribute approach for direct AR launch on iOS
-        const arLink = document.createElement('a');
-        arLink.setAttribute('rel', 'ar');
-        arLink.setAttribute('href', usdzModelUrl);
-        // Adding the AR quick look parameters to force immediate AR mode
-        arLink.href = `${usdzModelUrl}#allowsContentScaling=0&autoplay=1&shouldOpenInAR=1`;
-        document.body.appendChild(arLink);
-        arLink.click();
-        document.body.removeChild(arLink);
+        // Utilisation d'une redirection directe pour iOS Quick Look AR
+        window.location.href = `${usdzModelUrl}#allowsContentScaling=0&autoplay=1&shouldOpenInAR=1`;
         
         // Réinitialiser l'état de chargement après un délai
         setTimeout(() => {
           setIsLoadingAR(false);
-        }, 5000); // 5 secondes, pour laisser le temps à l'app AR de démarrer
+        }, 2000); // 2 secondes, réduit car le lancement direct est plus rapide
       } else {
         // Pour Android, utiliser Scene Viewer
         window.location.href = `intent://arvr.google.com/scene-viewer/1.0?file=${window.location.origin}${gltfModelUrl}&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=${window.location.origin};end;`;
@@ -78,7 +71,7 @@ const IkeaProductPage = () => {
         // Réinitialiser l'état de chargement pour Android après un délai
         setTimeout(() => {
           setIsLoadingAR(false);
-        }, 5000);
+        }, 2000);
       }
     }, 300);
   };
