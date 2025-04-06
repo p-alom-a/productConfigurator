@@ -56,57 +56,35 @@ const IkeaProductPage = () => {
     
     setTimeout(() => {
       if (isIOS) {
-        // Approche 1: Utiliser un élément a avec des attributs appropriés
-        const arViewerElement = document.createElement('a');
-        arViewerElement.setAttribute('rel', 'ar');
+        // Approche utilisant un iframe invisible pour forcer l'ouverture AR
+        const iframe = document.createElement('iframe');
+        iframe.setAttribute('id', 'ar-iframe');
+        iframe.setAttribute('src', `ar:${window.location.origin}${usdzModelUrl}`);
+        iframe.style.display = 'none';
+        document.body.appendChild(iframe);
         
-        // Paramètres mis à jour selon la documentation Apple la plus récente
-        const fullURL = `${window.location.origin}${usdzModelUrl}#canonicalWebPageURL=${window.location.href}&allowsContentScaling=0`;
-        arViewerElement.href = fullURL;
-        
-        // Attributs supplémentaires importants
-        arViewerElement.setAttribute('id', 'ar-link');
-        arViewerElement.setAttribute('data-ar-mode', 'auto');
-        arViewerElement.setAttribute('data-hide-preview', 'true');
-        
-        // Approche 2: Ajouter une balise meta pour AR
-        const metaTag = document.createElement('meta');
-        metaTag.setAttribute('name', 'apple-mobile-web-app-capable');
-        metaTag.setAttribute('content', 'yes');
-        document.head.appendChild(metaTag);
-              
-        // Créer un bouton invisible et y injecter le code HTML AR
-        const hiddenButton = document.createElement('button');
-        hiddenButton.style.display = 'none';
-        hiddenButton.innerHTML = `
-          <a rel="ar" id="quick-look-link" href="${fullURL}" 
-             data-ar-mode="auto" 
-             data-hide-preview="true">
-          </a>
-        `;
-        document.body.appendChild(hiddenButton);
-        
-        // Tenter à la fois l'approche par programmation et l'approche HTML
-        try {
-          // Approche directe
-          window.location = `ar:${window.location.origin}${usdzModelUrl}`;
-          
-          // Approche de secours
-          setTimeout(() => {
-            document.getElementById('quick-look-link')?.click();
-            arViewerElement.click();
-          }, 200);
-        } catch (e) {
-          console.error("Erreur lors du lancement AR:", e);
-          arViewerElement.click();
-        }
-        
-        // Nettoyer les éléments créés
+        // Seconde approche: Utilisation du protocole "apple-ar:" via la redirection
         setTimeout(() => {
-          document.body.removeChild(hiddenButton);
-          document.head.removeChild(metaTag);
+          window.location = `apple-ar://quick-look/absolute-url?uri=${encodeURIComponent(`${window.location.origin}${usdzModelUrl}`)}`;
+        }, 300);
+        
+        // Approche de dernier recours (URI schéma direct)
+        setTimeout(() => {
+          const element = document.createElement('a');
+          element.setAttribute('href', `same-domain-ar://?url=${encodeURIComponent(usdzModelUrl)}`);
+          element.style.display = 'none';
+          document.body.appendChild(element);
+          element.click();
+          document.body.removeChild(element);
+        }, 600);
+        
+        // Nettoyage
+        setTimeout(() => {
+          if (document.getElementById('ar-iframe')) {
+            document.body.removeChild(document.getElementById('ar-iframe'));
+          }
           setIsLoadingAR(false);
-        }, 5000);
+        }, 2000);
       } else {
         // Code Android inchangé
         window.location.href = `intent://arvr.google.com/scene-viewer/1.0?file=${window.location.origin}${gltfModelUrl}&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=${window.location.origin};end;`;
