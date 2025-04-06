@@ -1,4 +1,4 @@
-import React, { useState, Suspense } from 'react';
+import React, { useState, Suspense, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Canvas } from '@react-three/fiber';
 import { Stage, OrbitControls } from '@react-three/drei';
@@ -67,6 +67,11 @@ const PersonnalisationPage = () => {
   const [activeColor, setActiveColor] = useState('caramel');
   const navigate = useNavigate();
 
+  // Force scrolling to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const handleTextureChange = (type) => {
     setTextureType(type);
     setActiveColor(type === 'leather' ? 'caramel' : 'gray');
@@ -79,7 +84,7 @@ const PersonnalisationPage = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation - style de la page d'accueil */}
-      <nav className="bg-white border-b border-gray-200 px-4 py-3">
+      <nav className="bg-white border-b border-gray-200 px-4 py-3 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center">
             <button
