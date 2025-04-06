@@ -46,39 +46,39 @@ const IkeaProductPage = () => {
     setActiveThumbId(thumbId);
   };
 
-  const openARView = () => {
-    // Activé l'indicateur de chargement
-    setIsLoadingAR(true);
-  
-    // URL du modèle GLTF
-    const gltfModelUrl = './model/assets/chair2.glb';
-  
-    setTimeout(() => {
-      if (isIOS) {
-        // Création et déclenchement d'un lien AR QuickLook dans le DOM
-        const anchor = document.createElement('a');
-        // Important: le rel="ar" déclenche le mode AR sur iOS
-        anchor.setAttribute('rel', 'ar');
-        anchor.setAttribute('href', usdzModelUrl);
-        // Ajouter au DOM, déclencher, puis supprimer
-        document.body.appendChild(anchor);
-        anchor.click();
-        document.body.removeChild(anchor);
-  
-        setTimeout(() => {
-          setIsLoadingAR(false);
-        }, 2000);
-      } else {
-        // Pour Android, utiliser Scene Viewer
-        window.location.href = `intent://arvr.google.com/scene-viewer/1.0?file=${window.location.origin}${gltfModelUrl}&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=${window.location.origin};end;`;
-  
-        setTimeout(() => {
-          setIsLoadingAR(false);
-        }, 2000);
-      }
-    }, 300);
-  };
-  
+ const openARView = () => {
+  // Activé l'indicateur de chargement
+  setIsLoadingAR(true);
+
+  // URL du modèle GLTF
+  const gltfModelUrl = './model/assets/chair2.glb';
+
+  setTimeout(() => {
+    if (isIOS) {
+      // Création et déclenchement d'un lien AR QuickLook dans le DOM
+      const anchor = document.createElement('a');
+      // Important: le rel="ar" déclenche le mode AR sur iOS
+      anchor.setAttribute('rel', 'ar');
+      anchor.setAttribute('href', usdzModelUrl);
+      // Ajouter au DOM, déclencher, puis supprimer
+      document.body.appendChild(anchor);
+      anchor.click();
+      document.body.removeChild(anchor);
+
+      setTimeout(() => {
+        setIsLoadingAR(false);
+      }, 2000);
+    } else {
+      // Pour Android, utiliser Scene Viewer
+      window.location.href = `intent://arvr.google.com/scene-viewer/1.0?file=${window.location.origin}${gltfModelUrl}&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=${window.location.origin};end;`;
+
+      setTimeout(() => {
+        setIsLoadingAR(false);
+      }, 2000);
+    }
+  }, 300);
+};
+
   
 
   // Avis clients fictifs
