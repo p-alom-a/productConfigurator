@@ -54,37 +54,63 @@ const IkeaProductPage = () => {
     const usdzModelUrl = './model/assets/chair2.usdz';
     const gltfModelUrl = './model/assets/chair2.glb';
     
-    // Ajouter un léger délai pour permettre à l'UI de se mettre à jour
     setTimeout(() => {
       if (isIOS) {
-        // Ajout des paramètres spécifiques à AR QuickLook pour forcer le mode AR immédiat
-        const arLink = document.createElement('a');
-        arLink.setAttribute('rel', 'ar');
+        // Approche 1: Utiliser un élément a avec des attributs appropriés
+        const arViewerElement = document.createElement('a');
+        arViewerElement.setAttribute('rel', 'ar');
         
-        // Ces paramètres sont essentiels pour lancer directement en mode AR sans interface intermédiaire
-        const enhancedURL = `${usdzModelUrl}#allowsContentScaling=0&autoplay=1&shouldOpenInAR=1&immersiveAR=1`;
-        arLink.setAttribute('href', enhancedURL);
+        // Paramètres mis à jour selon la documentation Apple la plus récente
+        const fullURL = `${window.location.origin}${usdzModelUrl}#canonicalWebPageURL=${window.location.href}&allowsContentScaling=0`;
+        arViewerElement.href = fullURL;
         
-        // Ajouter des attributs supplémentaires pour forcer l'expérience AR
-        if (arLink.relList && arLink.relList.supports && arLink.relList.supports('ar')) {
-          // Attributs Apple spécifiques
-          arLink.setAttribute('data-usdzaction', 'quicklook-and-ar');
-          arLink.setAttribute('data-ar-preferred', 'true');
+        // Attributs supplémentaires importants
+        arViewerElement.setAttribute('id', 'ar-link');
+        arViewerElement.setAttribute('data-ar-mode', 'auto');
+        arViewerElement.setAttribute('data-hide-preview', 'true');
+        
+        // Approche 2: Ajouter une balise meta pour AR
+        const metaTag = document.createElement('meta');
+        metaTag.setAttribute('name', 'apple-mobile-web-app-capable');
+        metaTag.setAttribute('content', 'yes');
+        document.head.appendChild(metaTag);
+              
+        // Créer un bouton invisible et y injecter le code HTML AR
+        const hiddenButton = document.createElement('button');
+        hiddenButton.style.display = 'none';
+        hiddenButton.innerHTML = `
+          <a rel="ar" id="quick-look-link" href="${fullURL}" 
+             data-ar-mode="auto" 
+             data-hide-preview="true">
+          </a>
+        `;
+        document.body.appendChild(hiddenButton);
+        
+        // Tenter à la fois l'approche par programmation et l'approche HTML
+        try {
+          // Approche directe
+          window.location = `ar:${window.location.origin}${usdzModelUrl}`;
+          
+          // Approche de secours
+          setTimeout(() => {
+            document.getElementById('quick-look-link')?.click();
+            arViewerElement.click();
+          }, 200);
+        } catch (e) {
+          console.error("Erreur lors du lancement AR:", e);
+          arViewerElement.click();
         }
         
-        document.body.appendChild(arLink);
-        arLink.click();
-        document.body.removeChild(arLink);
-        
-        // Réinitialiser l'état de chargement après un délai
+        // Nettoyer les éléments créés
         setTimeout(() => {
+          document.body.removeChild(hiddenButton);
+          document.head.removeChild(metaTag);
           setIsLoadingAR(false);
-        }, 5000); // 5 secondes, pour laisser le temps à l'app AR de démarrer
+        }, 5000);
       } else {
-        // Pour Android, utiliser Scene Viewer (inchangé)
+        // Code Android inchangé
         window.location.href = `intent://arvr.google.com/scene-viewer/1.0?file=${window.location.origin}${gltfModelUrl}&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=${window.location.origin};end;`;
         
-        // Réinitialiser l'état de chargement pour Android après un délai
         setTimeout(() => {
           setIsLoadingAR(false);
         }, 5000);
