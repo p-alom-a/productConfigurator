@@ -28,7 +28,7 @@ const ChairScene = ({ activeTexture, activeColor }) => {
       alpha: false
     }}
     camera={{ position: [1.3, 0.3, -0.6], fov: 45 }}
-    className="w-full h-[600px] bg-white rounded-lg shadow-lg"
+    className="w-full h-[400px] md:h-[600px] bg-white rounded-lg shadow-lg"
   >
       <color attach="background" args={["#f5f5f5"]} />
       <ambientLight intensity={1.5} />
@@ -99,8 +99,28 @@ const PersonnalisationPage = () => {
 
       <div className="max-w-7xl mx-auto px-4 py-8">
         <h1 className="text-2xl font-semibold mb-6">Personnalisation - SÖDERHAMN</h1>
+        
+        {/* Modifié: ordre inversé en mobile */}
         <div className="flex flex-col md:flex-row flex-1 gap-8">
-          <div className="w-full md:w-1/3 bg-white p-6 border border-gray-200 rounded-lg shadow-sm">
+          {/* Visualisation du produit - maintenant en premier pour mobile */}
+          <div className="w-full md:w-2/3 order-1 md:order-2 bg-gray-50 flex items-center justify-center p-4 md:p-8 relative min-h-72 md:min-h-96 border border-gray-200 rounded-lg mb-8 md:mb-0">
+            <div className="w-full h-72 md:h-full relative rounded-lg overflow-hidden">
+              <Suspense fallback={
+                <div className="absolute inset-0 flex items-center justify-center bg-white">
+                  <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-gray-800"></div>
+                  <p className="ml-4 text-gray-800 font-medium">Chargement du modèle 3D...</p>
+                </div>
+              }>
+                <ChairScene
+                  activeTexture={textureType}
+                  activeColor={activeColor}
+                />
+              </Suspense>
+            </div>
+          </div>
+
+          {/* Paramètres de personnalisation - maintenant en second pour mobile */}
+          <div className="w-full md:w-1/3 order-2 md:order-1 bg-white p-6 border border-gray-200 rounded-lg shadow-sm">
             <h2 className="text-xl font-semibold mb-4">Personnalisation</h2>
 
             <div className="mb-6">
@@ -164,22 +184,6 @@ const PersonnalisationPage = () => {
                   ? 'Choisissez une teinte de cuir qui complémente votre intérieur.'
                   : 'Le tissu offre un confort et une variété de couleurs.'}
               </p>
-            </div>
-          </div>
-
-          <div className="w-full md:w-2/3 bg-gray-50 flex items-center justify-center p-4 md:p-8 relative min-h-96 border border-gray-200 rounded-lg">
-            <div className="w-full h-96 md:h-full relative rounded-lg overflow-hidden">
-              <Suspense fallback={
-                <div className="absolute inset-0 flex items-center justify-center bg-white">
-                  <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-gray-800"></div>
-                  <p className="ml-4 text-gray-800 font-medium">Chargement du modèle 3D...</p>
-                </div>
-              }>
-                <ChairScene
-                  activeTexture={textureType}
-                  activeColor={activeColor}
-                />
-              </Suspense>
             </div>
           </div>
         </div>
