@@ -48,7 +48,7 @@ const IkeaProductPage = () => {
 
   const openARView = () => {
     // Activer l'indicateur de chargement
-    setIsLoadingAR(true);
+    // setIsLoadingAR(true);
   
     // URLs des modèles 3D
     const usdzModelUrl = './model/assets/chair2.usdz';
