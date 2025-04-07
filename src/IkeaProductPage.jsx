@@ -48,7 +48,7 @@ const IkeaProductPage = () => {
 
   const openARView = () => {
     // Activer l'indicateur de chargement
-    // setIsLoadingAR(true);
+    setIsLoadingAR(true);
   
     // URLs des modèles 3D
     const usdzModelUrl = './model/assets/chair2.usdz';
@@ -60,11 +60,11 @@ const IkeaProductPage = () => {
         const arLink = document.createElement('a');
         arLink.setAttribute('rel', 'ar');
         
-        // Paramètres optimisés pour QuickLook AR
+        // Paramètres optimisés pour QuickLook AR - forcer l'ouverture directe en AR
         const quickLookParams = new URLSearchParams({
           allowsContentScaling: '0',
           autoplay: '1',
-          shouldOpenInAR: '1', // Force l'ouverture directe en AR
+          shouldOpenInAR: '1', // Force l'ouverture directe en AR sans interface intermédiaire
           canonicalWebPageURL: window.location.href,
           applePayButtonType: 'plain'
         }).toString();
@@ -83,7 +83,7 @@ const IkeaProductPage = () => {
           setIsLoadingAR(false);
         }, 2000);
       } else {
-        // Code inchangé pour Android
+        // Code pour Android
         window.location.href = `intent://arvr.google.com/scene-viewer/1.0?file=${window.location.origin}${gltfModelUrl}&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=${window.location.origin};end;`;
         
         setTimeout(() => {
@@ -92,6 +92,7 @@ const IkeaProductPage = () => {
       }
     }, 300);
   };
+ 
   // Avis clients fictifs
   const reviews = [
     {
