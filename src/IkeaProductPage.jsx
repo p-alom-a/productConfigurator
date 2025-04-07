@@ -202,7 +202,7 @@ const IkeaProductPage = () => {
             <p className="text-gray-600">
               Un fauteuil élégant recouvert de cuir pleine fleur de haute qualité, offrant un confort exceptionnel grâce à son assise profonde et ses accoudoirs généreux. Son design scandinave contemporain s'intègre parfaitement dans tout type d'intérieur.
             </p>
-            <a rel="ar" href="./assets/chair2.usdz">Voir en AR</a>
+            <a href="./assets/chair2.usdz">Voir en AR</a>
             <div className="space-y-4">
               <button disabled className="w-full bg-gray-300 text-white py-4 rounded-full font-semibold cursor-not-allowed">
                 Indisponible
