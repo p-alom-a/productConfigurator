@@ -1,0 +1,5 @@
+defaults:
+  - scope:
+      path: "**.usdz"
+    values:
+      mime_type: "model/vnd.usdz+zip"
