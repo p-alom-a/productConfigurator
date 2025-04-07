@@ -11,7 +11,7 @@ const ImageThumbnail = ({ image, alt, onClick, isActive = false }) => {
       src={image}
       alt={alt}
       onClick={onClick}
-      className={`w-full h-24 object-cover rounded-md cursor-pointer transition
+      className={`w-full h-24 object-cover rounded-md cursor-pointer transition 
         ${isActive ? 'border-2 border-gray-800' : 'hover:opacity-75'}`}
     />
   );
@@ -34,7 +34,7 @@ const IkeaProductPage = () => {
       setIsMobile(mobileCheck);
       setIsIOS(iosCheck);
     };
-
+    
     checkDevice();
     window.addEventListener('resize', checkDevice);
     return () => window.removeEventListener('resize', checkDevice);
@@ -47,51 +47,23 @@ const IkeaProductPage = () => {
   };
 
   const openARView = () => {
-    // Activer l'indicateur de chargement
-    setIsLoadingAR(true);
-
     // URLs des modèles 3D
     const usdzModelUrl = './model/assets/chair2.usdz';
     const gltfModelUrl = './model/assets/chair2.glb';
-
-    setTimeout(() => {
-      if (isIOS) {
-        // Configuration pour lancer directement le mode AR sur iOS
-        const arLink = document.createElement('a');
-
-        // Paramètres optimisés pour QuickLook AR - forcer l'ouverture directe en AR
-        const quickLookParams = new URLSearchParams({
-          allowsContentScaling: '0',
-          autoplay: '1',
-          shouldOpenInAR: '1', // Force l'ouverture directe en AR sans interface intermédiaire
-          canonicalWebPageURL: window.location.href,
-          applePayButtonType: 'plain'
-        }).toString();
-
-        // Appliquer les paramètres à l'URL USDZ
-        arLink.href = `${usdzModelUrl}?${quickLookParams}`;
-
-        // Ajouter temporairement au DOM, cliquer, puis supprimer
-        arLink.style.display = 'none';
-        document.body.appendChild(arLink);
-        arLink.click();
-        document.body.removeChild(arLink);
-
-        // Réinitialiser l'état de chargement après un délai
-        setTimeout(() => {
-          setIsLoadingAR(false);
-        }, 2000);
-      } else {
-        // Code pour Android
-        window.location.href = `intent://arvr.google.com/scene-viewer/1.0?file=${window.location.origin}${gltfModelUrl}&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=${window.location.origin};end;`;
-
-        setTimeout(() => {
-          setIsLoadingAR(false);
-        }, 5000);
-      }
-    }, 300);
+    
+    if (isIOS) {
+      // Créer un lien direct vers le fichier USDZ
+      const arUrl = `${window.location.origin}${usdzModelUrl}`;
+      window.location.href = arUrl;
+    } else if (/Android/i.test(navigator.userAgent)) {
+      // Code pour Android
+      window.location.href = `intent://arvr.google.com/scene-viewer/1.0?file=${window.location.origin}${gltfModelUrl}&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=${window.location.origin};end;`;
+    } else {
+      // Pour d'autres appareils
+      alert("La réalité augmentée n'est pas prise en charge sur cet appareil.");
+    }
   };
-
+ 
   // Avis clients fictifs
   const reviews = [
     {
@@ -167,7 +139,7 @@ const IkeaProductPage = () => {
             <p className="text-gray-500 text-sm text-center">
               L'application AR devrait s'ouvrir automatiquement. Si rien ne se passe après quelques secondes, vérifiez que votre appareil est compatible.
             </p>
-            <button
+            <button 
               onClick={() => setIsLoadingAR(false)}
               className="mt-4 px-4 py-2 bg-gray-200 rounded-full hover:bg-gray-300 transition"
             >
@@ -214,13 +186,13 @@ const IkeaProductPage = () => {
               </p>
             </div>
             <div className="flex gap-3 mb-4">
-              <button
+              <button 
                 className={`px-4 py-2 rounded-full border ${selectedMaterial === 'cuir' ? 'bg-gray-100 border-gray-800' : 'border-gray-300'}`}
                 onClick={() => setSelectedMaterial('cuir')}
               >
                 Cuir noir
               </button>
-              <button
+              <button 
                 className={`px-4 py-2 rounded-full border ${selectedMaterial === 'coton' ? 'bg-gray-100 border-gray-800' : 'border-gray-300'}`}
                 onClick={() => setSelectedMaterial('coton')}
               >
@@ -291,9 +263,9 @@ const IkeaProductPage = () => {
                 </div>
                 <div className="flex mb-2">
                   {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`w-4 h-4 ${i < review.rating ? 'text-gray-800 fill-gray-800' : 'text-gray-300'}`}
+                    <Star 
+                      key={i} 
+                      className={`w-4 h-4 ${i < review.rating ? 'text-gray-800 fill-gray-800' : 'text-gray-300'}`} 
                     />
                   ))}
                 </div>
@@ -309,9 +281,9 @@ const IkeaProductPage = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {suggestedProducts.map((product, index) => (
               <div key={index} className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition cursor-pointer">
-                <img
-                  src={product.image}
-                  alt={product.name}
+                <img 
+                  src={product.image} 
+                  alt={product.name} 
                   className="w-full h-48 object-cover"
                 />
                 <div className="p-4">
