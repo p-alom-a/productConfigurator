@@ -17,6 +17,15 @@ const ImageThumbnail = ({ image, alt, onClick, isActive = false }) => {
   );
 };
 
+// Composant caché pour AR
+const HiddenARViewer = ({ modelPath }) => {
+  return (
+    <div style={{ width: 0, height: 0, position: 'absolute', opacity: 0, overflow: 'hidden' }}>
+      <a rel="ar" href={modelPath} id="ar-link">Voir en AR</a>
+    </div>
+  );
+};
+
 const IkeaProductPage = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
@@ -48,13 +57,15 @@ const IkeaProductPage = () => {
 
   const openARView = () => {
     // URLs des modèles 3D
-    const usdzModelUrl = './model/assets/chair2.usdz';
-    const gltfModelUrl = './model/assets/chair2.glb';
+    const usdzModelUrl = '/assets/chair2.usdz'; // Chemin corrigé
+    const gltfModelUrl = '/assets/chair2.glb'; // Chemin corrigé
     
     if (isIOS) {
-      // Créer un lien direct vers le fichier USDZ
-      const arUrl = `${window.location.origin}${usdzModelUrl}`;
-      window.location.href = arUrl;
+      // Utiliser le lien caché pour iOS
+      const arLink = document.getElementById('ar-link');
+      if (arLink) {
+        arLink.click();
+      }
     } else if (/Android/i.test(navigator.userAgent)) {
       // Code pour Android
       window.location.href = `intent://arvr.google.com/scene-viewer/1.0?file=${window.location.origin}${gltfModelUrl}&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=${window.location.origin};end;`;
@@ -126,6 +137,9 @@ const IkeaProductPage = () => {
           </div>
         </div>
       </nav>
+
+      {/* Inclure le composant AR caché pour iOS */}
+      {isIOS && <HiddenARViewer modelPath="/assets/chair2.usdz" />}
 
       {/* Modal de chargement AR */}
       {isLoadingAR && (
@@ -202,7 +216,7 @@ const IkeaProductPage = () => {
             <p className="text-gray-600">
               Un fauteuil élégant recouvert de cuir pleine fleur de haute qualité, offrant un confort exceptionnel grâce à son assise profonde et ses accoudoirs généreux. Son design scandinave contemporain s'intègre parfaitement dans tout type d'intérieur.
             </p>
-            <a href="./assets/chair2.usdz">Voir en AR</a>
+  
             <div className="space-y-4">
               <button disabled className="w-full bg-gray-300 text-white py-4 rounded-full font-semibold cursor-not-allowed">
                 Indisponible
