@@ -125,7 +125,6 @@ const IkeaProductPage = () => {
     if (isIOS && isMobile) {
       return (
         <div className="space-y-4">
-          {/* Image principale dans la balise AR */}
           <a 
             rel="ar" 
             href={usdzModelUrl}
@@ -136,9 +135,15 @@ const IkeaProductPage = () => {
               alt="SÖDERHAMN Fauteuil en cuir"
               className="w-full h-[500px] object-cover rounded-lg"
             />
+            {/* Bouton AR intégré dans la balise <a> pour iOS */}
+            <button
+              className="mt-4 w-full bg-white border-2 border-gray-600 text-gray-600 py-4 rounded-full font-semibold hover:bg-gray-50 transition flex items-center justify-center gap-2"
+            >
+              <View className="w-5 h-5" />
+              Voir en réalité augmentée
+              <ChevronRight className="w-5 h-5" />
+            </button>
           </a>
-          
-          {/* Miniatures */}
           <div className="grid grid-cols-4 gap-2">
             {productImages.thumbnails.map((thumb) => (
               <ImageThumbnail
@@ -150,21 +155,6 @@ const IkeaProductPage = () => {
               />
             ))}
           </div>
-          
-          {/* Bouton AR pour iOS en dessous des miniatures */}
-          <a 
-            rel="ar" 
-            href={usdzModelUrl}
-            className="block mt-4"
-          >
-            <button
-              className="w-full bg-white border-2 border-gray-600 text-gray-600 py-4 rounded-full font-semibold hover:bg-gray-50 transition flex items-center justify-center gap-2"
-            >
-              <View className="w-5 h-5" />
-              Voir en réalité augmentée
-              <ChevronRight className="w-5 h-5" />
-            </button>
-          </a>
         </div>
       );
     } 
@@ -188,18 +178,6 @@ const IkeaProductPage = () => {
             />
           ))}
         </div>
-        
-        {/* Bouton AR pour Android en dessous des miniatures */}
-        {isMobile && !isIOS && (
-          <button
-            onClick={openARView}
-            className="w-full mt-4 bg-white border-2 border-gray-600 text-gray-600 py-4 rounded-full font-semibold hover:bg-gray-50 transition flex items-center justify-center gap-2"
-          >
-            <View className="w-5 h-5" />
-            Voir en réalité augmentée
-            <ChevronRight className="w-5 h-5" />
-          </button>
-        )}
       </div>
     );
   };
@@ -287,7 +265,17 @@ const IkeaProductPage = () => {
                 Personnaliser en 3D
                 <ChevronRight className="w-5 h-5" />
               </button>
-              {/* Bouton AR retiré d'ici car déplacé dans renderImageGallery */}
+              {/* Bouton AR pour Android ou appareils non-iOS */}
+              {isMobile && !isIOS && (
+                <button
+                  onClick={openARView}
+                  className="w-full bg-white border-2 border-gray-600 text-gray-600 py-4 rounded-full font-semibold hover:bg-gray-50 transition flex items-center justify-center gap-2"
+                >
+                  <View className="w-5 h-5" />
+                  Voir en réalité augmentée
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+              )}
             </div>
             <div className="border-t border-gray-200 pt-6 space-y-4">
               <h3 className="font-semibold text-lg">Caractéristiques principales</h3>
