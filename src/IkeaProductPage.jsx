@@ -17,15 +17,6 @@ const ImageThumbnail = ({ image, alt, onClick, isActive = false }) => {
   );
 };
 
-// Composant caché pour AR
-const HiddenARViewer = ({ modelPath }) => {
-  return (
-    <div style={{ width: 0, height: 0, position: 'absolute', opacity: 0, overflow: 'hidden' }}>
-      <a rel="ar" href={modelPath} id="ar-link">Voir en AR</a>
-    </div>
-  );
-};
-
 const IkeaProductPage = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
@@ -56,24 +47,51 @@ const IkeaProductPage = () => {
   };
 
   const openARView = () => {
+    // Activer l'indicateur de chargement
+    setIsLoadingAR(true);
+  
     // URLs des modèles 3D
-    const usdzModelUrl = '/assets/chair2.usdz'; // Chemin corrigé
-    const gltfModelUrl = '/assets/chair2.glb'; // Chemin corrigé
-    
-    if (isIOS) {
-      // Utiliser le lien caché pour iOS
-      const arLink = document.getElementById('ar-link');
-      if (arLink) {
+    const usdzModelUrl = './assets/chair2.usdz';
+    const gltfModelUrl = './model/assets/chair2.glb';
+  
+    setTimeout(() => {
+      if (isIOS) {
+        // Configuration pour lancer directement le mode AR sur iOS
+        const arLink = document.createElement('a');
+  
+        // Paramètres optimisés pour QuickLook AR - forcer l'ouverture directe en AR
+        const quickLookParams = new URLSearchParams({
+          allowsContentScaling: '0',
+          autoplay: '1',
+          shouldOpenInAR: '1', // Force l'ouverture directe en AR sans interface intermédiaire
+          canonicalWebPageURL: window.location.href,
+          applePayButtonType: 'plain'
+        }).toString();
+  
+        // Appliquer les paramètres à l'URL USDZ
+        arLink.href = `${usdzModelUrl}?${quickLookParams}`;
+  
+        // Ajouter temporairement au DOM, cliquer, puis supprimer
+        arLink.style.display = 'none';
+        document.body.appendChild(arLink);
         arLink.click();
+        document.body.removeChild(arLink);
+  
+        // Réinitialiser l'état de chargement après un délai
+        setTimeout(() => {
+          setIsLoadingAR(false);
+        }, 2000);
+      } else {
+        // Code pour Android
+        window.location.href = `intent://arvr.google.com/scene-viewer/1.0?file=${window.location.origin}${gltfModelUrl}&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=${window.location.origin};end;`;
+  
+        setTimeout(() => {
+          setIsLoadingAR(false);
+        }, 5000);
       }
-    } else if (/Android/i.test(navigator.userAgent)) {
-      // Code pour Android
-      window.location.href = `intent://arvr.google.com/scene-viewer/1.0?file=${window.location.origin}${gltfModelUrl}&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=${window.location.origin};end;`;
-    } else {
-      // Pour d'autres appareils
-      alert("La réalité augmentée n'est pas prise en charge sur cet appareil.");
-    }
+    }, 300);
   };
+  
  
   // Avis clients fictifs
   const reviews = [
@@ -137,9 +155,6 @@ const IkeaProductPage = () => {
           </div>
         </div>
       </nav>
-
-      {/* Inclure le composant AR caché pour iOS */}
-      {isIOS && <HiddenARViewer modelPath="/assets/chair2.usdz" />}
 
       {/* Modal de chargement AR */}
       {isLoadingAR && (
@@ -216,7 +231,6 @@ const IkeaProductPage = () => {
             <p className="text-gray-600">
               Un fauteuil élégant recouvert de cuir pleine fleur de haute qualité, offrant un confort exceptionnel grâce à son assise profonde et ses accoudoirs généreux. Son design scandinave contemporain s'intègre parfaitement dans tout type d'intérieur.
             </p>
-  
             <div className="space-y-4">
               <button disabled className="w-full bg-gray-300 text-white py-4 rounded-full font-semibold cursor-not-allowed">
                 Indisponible
