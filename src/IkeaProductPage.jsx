@@ -25,6 +25,7 @@ const IkeaProductPage = () => {
   const [currentImage, setCurrentImage] = useState(productImages.main);
   const [activeThumbId, setActiveThumbId] = useState(null);
   const navigate = useNavigate();
+  const usdzModelUrl = './assets/chair2.usdz';
 
   useEffect(() => {
     const checkDevice = () => {
@@ -47,49 +48,24 @@ const IkeaProductPage = () => {
   };
 
   const openARView = () => {
-    // Activer l'indicateur de chargement
-    setIsLoadingAR(true);
-  
-    // URLs des modèles 3D
-    const usdzModelUrl = './assets/chair2.usdz';
-    const gltfModelUrl = './model/assets/chair2.glb';
-  
-    setTimeout(() => {
-      if (isIOS) {
-        // Configuration pour lancer directement le mode AR sur iOS
-        const arLink = document.createElement('a');
-  
-        // Paramètres optimisés pour QuickLook AR - forcer l'ouverture directe en AR
-        const quickLookParams = new URLSearchParams({
-          allowsContentScaling: '0',
-          autoplay: '1',
-          shouldOpenInAR: '1', // Force l'ouverture directe en AR sans interface intermédiaire
-          canonicalWebPageURL: window.location.href,
-          applePayButtonType: 'plain'
-        }).toString();
-  
-        // Appliquer les paramètres à l'URL USDZ
-        arLink.href = `${usdzModelUrl}?${quickLookParams}`;
-  
-        // Ajouter temporairement au DOM, cliquer, puis supprimer
-        arLink.style.display = 'none';
-        document.body.appendChild(arLink);
-        arLink.click();
-        document.body.removeChild(arLink);
-  
-        // Réinitialiser l'état de chargement après un délai
-        setTimeout(() => {
-          setIsLoadingAR(false);
-        }, 2000);
-      } else {
+    // Si ce n'est pas iOS, on utilise la fonction originale
+    if (!isIOS) {
+      // Activer l'indicateur de chargement
+      setIsLoadingAR(true);
+      
+      // URL du modèle 3D pour Android
+      const gltfModelUrl = './model/assets/chair2.glb';
+    
+      setTimeout(() => {
         // Code pour Android
         window.location.href = `intent://arvr.google.com/scene-viewer/1.0?file=${window.location.origin}${gltfModelUrl}&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=${window.location.origin};end;`;
-  
+    
         setTimeout(() => {
           setIsLoadingAR(false);
         }, 5000);
-      }
-    }, 300);
+      }, 300);
+    }
+    // Pour iOS, le lien AR est géré directement par la balise <a rel="ar">
   };
   
  
@@ -143,6 +119,69 @@ const IkeaProductPage = () => {
     }
   ];
 
+  // Déterminer le contenu de la galerie d'images en fonction de l'appareil
+  const renderImageGallery = () => {
+    // Pour les appareils iOS mobiles, on utilise la balise AR
+    if (isIOS && isMobile) {
+      return (
+        <div className="space-y-4">
+          <a 
+            rel="ar" 
+            href={usdzModelUrl}
+            className="block"
+          >
+            <img
+              src={currentImage}
+              alt="SÖDERHAMN Fauteuil en cuir"
+              className="w-full h-[500px] object-cover rounded-lg"
+            />
+            {/* Bouton AR intégré dans la balise <a> pour iOS */}
+            <button
+              className="mt-4 w-full bg-white border-2 border-gray-600 text-gray-600 py-4 rounded-full font-semibold hover:bg-gray-50 transition flex items-center justify-center gap-2"
+            >
+              <View className="w-5 h-5" />
+              Voir en réalité augmentée
+              <ChevronRight className="w-5 h-5" />
+            </button>
+          </a>
+          <div className="grid grid-cols-4 gap-2">
+            {productImages.thumbnails.map((thumb) => (
+              <ImageThumbnail
+                key={thumb.id}
+                image={thumb.src}
+                alt={thumb.alt}
+                onClick={() => changeMainImage(thumb.src, thumb.id)}
+                isActive={activeThumbId === thumb.id}
+              />
+            ))}
+          </div>
+        </div>
+      );
+    } 
+    
+    // Pour les autres appareils, on utilise le code original
+    return (
+      <div className="space-y-4">
+        <img
+          src={currentImage}
+          alt="SÖDERHAMN Fauteuil en cuir"
+          className="w-full h-[500px] object-cover rounded-lg"
+        />
+        <div className="grid grid-cols-4 gap-2">
+          {productImages.thumbnails.map((thumb) => (
+            <ImageThumbnail
+              key={thumb.id}
+              image={thumb.src}
+              alt={thumb.alt}
+              onClick={() => changeMainImage(thumb.src, thumb.id)}
+              isActive={activeThumbId === thumb.id}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation */}
@@ -181,25 +220,8 @@ const IkeaProductPage = () => {
       {/* Product Section */}
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="grid md:grid-cols-2 gap-8">
-          {/* Image Gallery */}
-          <div className="space-y-4">
-            <img
-              src={currentImage}
-              alt="SÖDERHAMN Fauteuil en cuir"
-              className="w-full h-[500px] object-cover rounded-lg"
-            />
-            <div className="grid grid-cols-4 gap-2">
-              {productImages.thumbnails.map((thumb) => (
-                <ImageThumbnail
-                  key={thumb.id}
-                  image={thumb.src}
-                  alt={thumb.alt}
-                  onClick={() => changeMainImage(thumb.src, thumb.id)}
-                  isActive={activeThumbId === thumb.id}
-                />
-              ))}
-            </div>
-          </div>
+          {/* Image Gallery - Rendu conditionnel */}
+          {renderImageGallery()}
 
           {/* Product Info */}
           <div className="space-y-6">
@@ -243,7 +265,8 @@ const IkeaProductPage = () => {
                 Personnaliser en 3D
                 <ChevronRight className="w-5 h-5" />
               </button>
-              {isMobile && (
+              {/* Bouton AR pour Android ou appareils non-iOS */}
+              {isMobile && !isIOS && (
                 <button
                   onClick={openARView}
                   className="w-full bg-white border-2 border-gray-600 text-gray-600 py-4 rounded-full font-semibold hover:bg-gray-50 transition flex items-center justify-center gap-2"
