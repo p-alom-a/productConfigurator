@@ -56,34 +56,50 @@ const IkeaProductPage = () => {
   
     setTimeout(() => {
       if (isIOS) {
-        // Configuration pour lancer directement le mode AR sur iOS
-        const arLink = document.createElement('a');
-        arLink.setAttribute('rel', 'ar');
+        // Détection du navigateur
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
         
-        // Paramètres optimisés pour QuickLook AR - forcer l'ouverture directe en AR
+        // Configuration pour lancer directement le mode AR
+        const arLink = document.createElement('a');
+        
+        // Pour Safari, utiliser l'attribut rel="ar"
+        if (isSafari) {
+          arLink.setAttribute('rel', 'ar');
+        }
+        
+        // Paramètres optimisés pour QuickLook AR
         const quickLookParams = new URLSearchParams({
           allowsContentScaling: '0',
           autoplay: '1',
-          shouldOpenInAR: '1', // Force l'ouverture directe en AR sans interface intermédiaire
-          canonicalWebPageURL: window.location.href,
-          applePayButtonType: 'plain'
+          shouldOpenInAR: '1',
+          canonicalWebPageURL: window.location.href
         }).toString();
         
-        // Appliquer les paramètres à l'URL USDZ
+        // Construct URL with hash parameters
         arLink.href = `${usdzModelUrl}#${quickLookParams}`;
         
-        // Ajouter temporairement au DOM, cliquer, puis supprimer
-        arLink.style.display = 'none';
-        document.body.appendChild(arLink);
-        arLink.click();
-        document.body.removeChild(arLink);
-        
-        // Réinitialiser l'état de chargement après un délai
-        setTimeout(() => {
-          setIsLoadingAR(false);
-        }, 2000);
+        // Pour Chrome iOS, utiliser window.location directement peut être plus fiable
+        if (!isSafari) {
+          window.location.href = arLink.href;
+          
+          // Réinitialiser l'état de chargement après un délai pour Chrome
+          setTimeout(() => {
+            setIsLoadingAR(false);
+          }, 3000);
+        } else {
+          // Pour Safari, utiliser la méthode click()
+          arLink.style.display = 'none';
+          document.body.appendChild(arLink);
+          arLink.click();
+          document.body.removeChild(arLink);
+          
+          // Réinitialiser l'état de chargement après un délai pour Safari
+          setTimeout(() => {
+            setIsLoadingAR(false);
+          }, 2000);
+        }
       } else {
-        // Code pour Android
+        // Code pour Android inchangé
         window.location.href = `intent://arvr.google.com/scene-viewer/1.0?file=${window.location.origin}${gltfModelUrl}&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=${window.location.origin};end;`;
         
         setTimeout(() => {
