@@ -124,9 +124,9 @@ const IkeaProductPage = () => {
     // Pour les appareils iOS mobiles, on utilise la balise AR
     if (isIOS && isMobile) {
       return (
-        <div className="space-y-4 relative">
+        <div className="space-y-2 relative">
           {/* Container pour l'image et le bouton AR dans une seule balise <a rel="ar"> */}
-          <div className="mb-20 relative">
+          <div className="mb-2 relative">
             <a 
               rel="ar" 
               href={usdzModelUrl}
@@ -174,13 +174,23 @@ const IkeaProductPage = () => {
             Voir en réalité augmentée
             <ChevronRight className="w-5 h-5" />
           </button>
+          
+          {/* Bouton Personnaliser en 3D déplacé ici pour le mobile */}
+          <button
+            onClick={() => navigate('/personnalisation')}
+            className="w-full mt-2 bg-white border-2 border-gray-600 text-gray-600 py-4 rounded-full font-semibold hover:bg-gray-50 transition flex items-center justify-center gap-2"
+          >
+            <Cube className="w-5 h-5" />
+            Personnaliser en 3D
+            <ChevronRight className="w-5 h-5" />
+          </button>
         </div>
       );
     } 
     
-    // Pour les autres appareils, on utilise le code original
+    // Pour les autres appareils, on utilise le code modifié avec espace réduit
     return (
-      <div className="space-y-4">
+      <div className="space-y-2">
         <img
           src={currentImage}
           alt="SÖDERHAMN Fauteuil en cuir"
@@ -200,14 +210,26 @@ const IkeaProductPage = () => {
         
         {/* Bouton AR pour Android en dessous des miniatures */}
         {isMobile && !isIOS && (
-          <button
-            onClick={openARView}
-            className="w-full mt-4 bg-white border-2 border-gray-600 text-gray-600 py-4 rounded-full font-semibold hover:bg-gray-50 transition flex items-center justify-center gap-2"
-          >
-            <View className="w-5 h-5" />
-            Voir en réalité augmentée
-            <ChevronRight className="w-5 h-5" />
-          </button>
+          <>
+            <button
+              onClick={openARView}
+              className="w-full mt-4 bg-white border-2 border-gray-600 text-gray-600 py-4 rounded-full font-semibold hover:bg-gray-50 transition flex items-center justify-center gap-2"
+            >
+              <View className="w-5 h-5" />
+              Voir en réalité augmentée
+              <ChevronRight className="w-5 h-5" />
+            </button>
+            
+            {/* Bouton Personnaliser en 3D déplacé ici pour le mobile Android */}
+            <button
+              onClick={() => navigate('/personnalisation')}
+              className="w-full mt-2 bg-white border-2 border-gray-600 text-gray-600 py-4 rounded-full font-semibold hover:bg-gray-50 transition flex items-center justify-center gap-2"
+            >
+              <Cube className="w-5 h-5" />
+              Personnaliser en 3D
+              <ChevronRight className="w-5 h-5" />
+            </button>
+          </>
         )}
       </div>
     );
@@ -288,15 +310,18 @@ const IkeaProductPage = () => {
               <button disabled className="w-full bg-gray-300 text-white py-4 rounded-full font-semibold cursor-not-allowed">
                 Indisponible
               </button>
-              <button
-                onClick={() => navigate('/personnalisation')}
-                className="w-full bg-white border-2 border-gray-600 text-gray-600 py-4 rounded-full font-semibold hover:bg-gray-50 transition flex items-center justify-center gap-2"
-              >
-                <Cube className="w-5 h-5" />
-                Personnaliser en 3D
-                <ChevronRight className="w-5 h-5" />
-              </button>
-              {/* Bouton AR retiré d'ici car déplacé dans renderImageGallery */}
+              
+              {/* Le bouton Personnaliser en 3D est maintenant conditionnel pour le desktop uniquement */}
+              {(!isMobile || (isMobile && !isIOS && !isIOS)) && (
+                <button
+                  onClick={() => navigate('/personnalisation')}
+                  className="w-full bg-white border-2 border-gray-600 text-gray-600 py-4 rounded-full font-semibold hover:bg-gray-50 transition flex items-center justify-center gap-2"
+                >
+                  <Cube className="w-5 h-5" />
+                  Personnaliser en 3D
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+              )}
             </div>
             <div className="border-t border-gray-200 pt-6 space-y-4">
               <h3 className="font-semibold text-lg">Caractéristiques principales</h3>
