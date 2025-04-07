@@ -56,43 +56,35 @@ const IkeaProductPage = () => {
   
     setTimeout(() => {
       if (isIOS) {
-        // Configuration pour lancer directement le mode AR sur iOS
-        const arLink = document.createElement('a');
-        arLink.setAttribute('rel', 'ar');
-  
-        // Paramètres optimisés pour QuickLook AR - forcer l'ouverture directe en AR
+        // Approche directe pour tous les navigateurs iOS
+        // Paramètres optimisés pour QuickLook AR
         const quickLookParams = new URLSearchParams({
           allowsContentScaling: '0',
           autoplay: '1',
-          shouldOpenInAR: '1', // Force l'ouverture directe en AR sans interface intermédiaire
-          canonicalWebPageURL: window.location.href,
-          applePayButtonType: 'plain'
+          shouldOpenInAR: '1',
+          canonicalWebPageURL: window.location.href
         }).toString();
-  
-        // Appliquer les paramètres à l'URL USDZ
-        arLink.href = `${usdzModelUrl}#${quickLookParams}`;
-  
-        // Ajouter temporairement au DOM, cliquer, puis supprimer
-        arLink.style.display = 'none';
-        document.body.appendChild(arLink);
-        arLink.click();
-        document.body.removeChild(arLink);
-  
+        
+        // Utilisation d'une URL directe avec le schéma de QuickLook
+        const arUrl = `${usdzModelUrl}#${quickLookParams}`;
+        
+        // Redirection directe - devrait fonctionner sur Safari et Chrome
+        window.location = arUrl;
+        
         // Réinitialiser l'état de chargement après un délai
         setTimeout(() => {
           setIsLoadingAR(false);
-        }, 2000);
+        }, 3000);
       } else {
         // Code pour Android
         window.location.href = `intent://arvr.google.com/scene-viewer/1.0?file=${window.location.origin}${gltfModelUrl}&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=${window.location.origin};end;`;
-  
+        
         setTimeout(() => {
           setIsLoadingAR(false);
         }, 5000);
       }
     }, 300);
   };
-  
  
   // Avis clients fictifs
   const reviews = [
