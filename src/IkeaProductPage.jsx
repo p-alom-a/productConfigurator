@@ -54,7 +54,7 @@ const IkeaProductPage = () => {
       setIsLoadingAR(true);
       
       // URL du modèle 3D pour Android
-      const gltfModelUrl = './model/assets/chair2.glb';
+      const gltfModelUrl = './model/assets/chair3.glb';
     
       setTimeout(() => {
         // Code pour Android
