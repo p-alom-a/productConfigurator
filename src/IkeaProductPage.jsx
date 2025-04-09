@@ -54,7 +54,7 @@ const IkeaProductPage = () => {
       setIsLoadingAR(true);
       
       // URL du modèle 3D pour Android
-      const gltfModelUrl = './model/assets/chair3.glb';
+      const gltfModelUrl = './model/assets/chair2.glb';
     
       setTimeout(() => {
         // Code pour Android
@@ -135,7 +135,7 @@ const IkeaProductPage = () => {
               <img
                 src={currentImage}
                 alt="SÖDERHAMN Fauteuil en cuir"
-                className="w-full h-[500px] object-cover rounded-lg"
+                className="w-full h-[400px] object-cover rounded-lg"
               />
               
               {/* Bouton AR positionné de manière absolue mais invisible (rendu transparent) */}
@@ -194,7 +194,7 @@ const IkeaProductPage = () => {
         <img
           src={currentImage}
           alt="SÖDERHAMN Fauteuil en cuir"
-          className="w-full h-[500px] object-cover rounded-lg"
+          className={`w-full ${isMobile ? 'h-[400px]' : 'h-[500px]'} object-cover rounded-lg`}
         />
         <div className="grid grid-cols-4 gap-2">
           {productImages.thumbnails.map((thumb) => (

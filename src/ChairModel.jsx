@@ -15,7 +15,7 @@ const colorMappings = {
 };
 
 export default function ChairModel({ activeTexture, activeColor }) {
-  const { nodes, materials } = useGLTF('./model/assets/chair3.glb');
+  const { nodes, materials } = useGLTF('./model/assets/chair2.glb');
 
   // Charger les textures de coton
   const cottonTextures = useTexture({
@@ -42,45 +42,70 @@ export default function ChairModel({ activeTexture, activeColor }) {
   });
 
   return (
-    <group {...props} dispose={null}>
-    <mesh
-      castShadow
-      receiveShadow
-      geometry={nodes.Aster_Luxury_Leather_Armchair.geometry}
-      material={materials.leather}>
+    <group>
       <mesh
+        name="Aster_Luxury_Leather_Armchair"
         castShadow
         receiveShadow
-        geometry={nodes.armature.geometry}
-        material={materials['wood.001']}
-      />
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.armature001.geometry}
-        material={materials['wood.001']}
-      />
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.armature002.geometry}
-        material={materials['wood.001']}
-      />
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.cuir.geometry}
-        material={materials.leather}
-      />
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.cuir001.geometry}
-        material={materials.leather}
-      />
-    </mesh>
-  </group>
+        geometry={nodes.Aster_Luxury_Leather_Armchair.geometry}
+        material={pbrMaterial}
+        position={[-0.264, 0.359, -0.026]}
+        rotation={[Math.PI / 2, 0.442, -Math.PI / 2]}
+        scale={0.295}
+      >
+        <mesh
+          name="armature"
+          castShadow
+          receiveShadow
+          geometry={nodes.armature.geometry}
+          material={materials['wood.001']}
+          position={[0, 0.408, 0.448]}
+          rotation={[-1.128, 0, -Math.PI / 2]}
+          scale={0.996}
+        />
+        <mesh
+          name="armature001"
+          castShadow
+          receiveShadow
+          geometry={nodes.armature001.geometry}
+          material={materials['wood.001']}
+          position={[0, 0.024, 1.258]}
+          rotation={[-1.128, 0, 0]}
+          scale={0.996}
+        />
+        <mesh
+          name="armature002"
+          castShadow
+          receiveShadow
+          geometry={nodes.armature002.geometry}
+          material={materials['wood.001']}
+          position={[0, 0.908, 1.229]}
+          rotation={[0.398, 0, 0]}
+          scale={0.996}
+        />
+        <mesh
+          name="cuir"
+          castShadow
+          receiveShadow
+          geometry={nodes.cuir.geometry}
+          material={pbrMaterial}
+          position={[0, 0.432, 0.825]}
+          rotation={[-1.128, 0, 0]}
+          scale={0.996}
+        />
+        <mesh
+          name="cuir001"
+          castShadow
+          receiveShadow
+          geometry={nodes.cuir001.geometry}
+          material={pbrMaterial}
+          position={[0, 0.222, 0.84]}
+          rotation={[0.442, 0, -Math.PI / 2]}
+          scale={0.996}
+        />
+      </mesh>
+    </group>
   );
 }
 
-useGLTF.preload('./model/assets/chair3.glb');
+useGLTF.preload('./model/assets/chair2.glb');

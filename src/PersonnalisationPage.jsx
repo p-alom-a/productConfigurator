@@ -27,7 +27,7 @@ const ChairScene = ({ activeTexture, activeColor }) => {
       antialias: true, 
       alpha: false
     }}
-    camera={{ position: [1.3, 0.3, -0.6], fov: 45 }}
+    camera={{ position: [0.9, 0.3, -0.4], fov: 45 }}
     className="w-full h-[400px] md:h-[600px] bg-white rounded-lg shadow-lg"
   >
       <color attach="background" args={["#f5f5f5"]} />
