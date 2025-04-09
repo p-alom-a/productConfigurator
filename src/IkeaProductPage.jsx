@@ -161,29 +161,27 @@ const IkeaProductPage = () => {
             ))}
           </div>
           
-          {/* Bouton AR visible pour l'utilisateur - ce bouton est en dehors de la balise <a> */}
-          {/* Mais nous avons un autre bouton invisible dans la balise <a> pour le comportement AR */}
-          <button
-            className="w-full mt-4 bg-white border-2 border-gray-600 text-gray-600 py-4 rounded-full font-semibold hover:bg-gray-50 transition flex items-center justify-center gap-2"
-            onClick={() => {
-              // Cette fonction simule un clic sur la balise AR
-              document.querySelector('a[rel="ar"]').click();
-            }}
-          >
-            <View className="w-5 h-5" />
-            Voir en réalité augmentée
-            <ChevronRight className="w-5 h-5" />
-          </button>
-          
-          {/* Bouton Personnaliser en 3D déplacé ici pour le mobile */}
-          <button
-            onClick={() => navigate('/personnalisation')}
-            className="w-full mt-2 bg-white border-2 border-gray-600 text-gray-600 py-4 rounded-full font-semibold hover:bg-gray-50 transition flex items-center justify-center gap-2"
-          >
-            <Cube className="w-5 h-5" />
-            Personnaliser en 3D
-            <ChevronRight className="w-5 h-5" />
-          </button>
+          {/* Boutons AR et 3D côte à côte */}
+          <div className="flex gap-2 mt-4">
+            <button
+              className="flex-1 bg-white border-2 border-gray-600 text-gray-600 py-4 rounded-full font-semibold hover:bg-gray-50 transition flex items-center justify-center gap-1"
+              onClick={() => {
+                // Cette fonction simule un clic sur la balise AR
+                document.querySelector('a[rel="ar"]').click();
+              }}
+            >
+              <View className="w-4 h-4" />
+              <span className="truncate">Voir en AR</span>
+            </button>
+            
+            <button
+              onClick={() => navigate('/personnalisation')}
+              className="flex-1 bg-white border-2 border-gray-600 text-gray-600 py-4 rounded-full font-semibold hover:bg-gray-50 transition flex items-center justify-center gap-1"
+            >
+              <Cube className="w-4 h-4" />
+              <span className="truncate">Personnaliser</span>
+            </button>
+          </div>
         </div>
       );
     } 
@@ -208,28 +206,25 @@ const IkeaProductPage = () => {
           ))}
         </div>
         
-        {/* Bouton AR pour Android en dessous des miniatures */}
+        {/* Boutons AR et 3D côte à côte pour Android */}
         {isMobile && !isIOS && (
-          <>
+          <div className="flex gap-2 mt-4">
             <button
               onClick={openARView}
-              className="w-full mt-4 bg-white border-2 border-gray-600 text-gray-600 py-4 rounded-full font-semibold hover:bg-gray-50 transition flex items-center justify-center gap-2"
+              className="flex-1 bg-white border-2 border-gray-600 text-gray-600 py-4 rounded-full font-semibold hover:bg-gray-50 transition flex items-center justify-center gap-1"
             >
-              <View className="w-5 h-5" />
-              Voir en réalité augmentée
-              <ChevronRight className="w-5 h-5" />
+              <View className="w-4 h-4" />
+              <span className="truncate">Voir en AR</span>
             </button>
             
-            {/* Bouton Personnaliser en 3D déplacé ici pour le mobile Android */}
             <button
               onClick={() => navigate('/personnalisation')}
-              className="w-full mt-2 bg-white border-2 border-gray-600 text-gray-600 py-4 rounded-full font-semibold hover:bg-gray-50 transition flex items-center justify-center gap-2"
+              className="flex-1 bg-white border-2 border-gray-600 text-gray-600 py-4 rounded-full font-semibold hover:bg-gray-50 transition flex items-center justify-center gap-1"
             >
-              <Cube className="w-5 h-5" />
-              Personnaliser en 3D
-              <ChevronRight className="w-5 h-5" />
+              <Cube className="w-4 h-4" />
+              <span className="truncate">Personnaliser</span>
             </button>
-          </>
+          </div>
         )}
       </div>
     );
