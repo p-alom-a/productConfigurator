@@ -25,7 +25,7 @@ const IkeaProductPage = () => {
   const [currentImage, setCurrentImage] = useState(productImages.main);
   const [activeThumbId, setActiveThumbId] = useState(null);
   const navigate = useNavigate();
-  const usdzModelUrl = './assets/chair2.usdz';
+  const usdzModelUrl = './assets/chair3.usdz';
 
   useEffect(() => {
     const checkDevice = () => {
